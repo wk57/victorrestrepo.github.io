@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portafolio | Desarrollador Web</title>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">VM RL <span>Portfolio</span></div>
+            <div class="menu-btn">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About me</a></li>
+                    <li><a href="#portfolio">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Hello, I'm <span class="highlight">Victor Restrepo L.</span></h1>
+                <p>Junior game developer with a passion for creating interactive and engaging experiences through code and design.</p>
+                <a href="#portfolio" class="btn">Projects</a>
+                <a href="#contact" class="btn btn-outline">Contact</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://github.com/wk57" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/victor-restrepo-287929276/" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About me</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-img">
+                    <img src="./images/yo.jpg" alt="Mi foto de perfil">
+                </div>
+                <div class="about-text">
+                    <h3>Game Developer in Progress</h3>
+                    <p>I'm a recent graduate and aspiring game developer with hands-on experience in small projects and prototypes. I enjoy building digital worlds, learning new tools, and exploring how games can be both fun and meaningful.</p>
+                    <p>Currently learning more about Game Dev, React and Node.js to expand my full-stack skills, with basic knowledge of SQL. I'm focused on growing as a developer and contributing to creative, innovative teams.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="section-title">
+                <h2>My Projects</h2>
+            </div>
+            <div class="portfolio-filter">
+                <button class="active" data-filter="all">All</button>
+                <button data-filter="General">General</button>
+                <button data-filter="Prototypes">Prototypes</button>
+                <button data-filter="Others">Others</button>
+            </div>
+            <div class="portfolio-grid">
+                <!-- Project 1 -------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="portfolio-item" data-category="web">
+                    <div class="portfolio-img">
+                        <!-- Imagen Estática Principal -->
+                        <img src="https://placehold.co/400x250/2a2a2a/ffffff?text=E-commerce+Static" alt="Proyecto 1 - Imagen Estática">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>E-commerce Moderno</h3>
+                        <p>Desarrollo web con React y Node.js</p>
+                        <div class="portfolio-links">
+                            <a href="#"><i class="fas fa-link"></i> Proyecto</a>
+                            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-details">
+                        <!-- Descripción del proyecto -->
+                        <p>Este proyecto es una plataforma de comercio electrónico construida con React para el frontend, ofreciendo una interfaz de usuario dinámica y responsiva. El backend fue desarrollado con Node.js y Express, gestionando la lógica del negocio, la autenticación de usuarios y la integración con una base de datos. Se implementaron funcionalidades clave como carrito de compras, gestión de productos, pasarela de pagos simulada y un panel de administración para la gestión de pedidos y usuarios. El objetivo principal fue crear una experiencia de compra fluida y segura.</p>
+                        <!-- Contenedor para el GIF, ahora dentro de portfolio-details -->
+                        <div class="portfolio-gif-details">
+                            <img src="https://placehold.co/350x200/gif/3a3a3a/eeeeee?text=E-commerce+GIF+Details" alt="Proyecto 1 - GIF en Detalles">
+                        </div>
+                    </div>
+                    <button class="toggle-details-btn btn-small">Ver más</button>
+                </div>
+
+                <!-- Project 2  -------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="portfolio-item" data-category="mobile">
+                    <div class="portfolio-img">
+                        <img src="https://placehold.co/400x250/2a2a2a/ffffff?text=App+Gestion+Static" alt="Proyecto 2 - Imagen Estática">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>App de Gestión</h3>
+                        <p>Aplicación React Native</p>
+                        <div class="portfolio-links">
+                            <a href="#"><i class="fas fa-link"></i> Proyecto</a>
+                            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-details">
+                        <p>Desarrollé una aplicación móvil de gestión de tareas y proyectos utilizando React Native, lo que permite una base de código única para iOS y Android. La aplicación incluye funcionalidades como la creación, edición y eliminación de tareas, asignación de prioridades, recordatorios y seguimiento del progreso. Se utilizó Firebase para la autenticación de usuarios y el almacenamiento de datos en tiempo real, garantizando una sincronización eficiente entre dispositivos. El enfoque estuvo en la usabilidad y una interfaz intuitiva para mejorar la productividad.</p>
+                        <!-- Para añadir GIF aquí, sigue el patrón del Proyecto 1 -->
+                        <!--
+                        <div class="portfolio-gif-details">
+                            <img src="https://placehold.co/350x200/gif/3a3a3a/eeeeee?text=App+Gestion+GIF" alt="Proyecto 2 - GIF en Detalles">
+                        </div>
+                        -->
+                    </div>
+                    <button class="toggle-details-btn btn-small">Ver más</button>
+                </div>
+
+                <!-- Project 3 - -------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="portfolio-item" data-category="Others">
+                    <div class="portfolio-img">
+                        <img src="https://placehold.co/400x250/2a2a2a/ffffff?text=Dashboard" alt="Proyecto 3">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>Dashboard Analítico</h3>
+                        <p>Diseño UI/UX y desarrollo</p>
+                        <div class="portfolio-links">
+                            <a href="#"><i class="fas fa-link"></i> Proyecto</a>
+                            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-details">
+                        <p>Este proyecto se centró en el diseño y desarrollo de un dashboard analítico interactivo para visualizar métricas de negocio clave. Realicé la investigación de usuarios y el diseño UI/UX, creando wireframes y prototipos en Figma. La implementación frontend se hizo con HTML, CSS y JavaScript, utilizando bibliotecas de gráficos para presentar los datos de manera clara y comprensible. El dashboard permite a los usuarios filtrar y analizar datos en tiempo real, proporcionando insights valiosos para la toma de decisiones estratégicas.</p>
+                        <!--
+                        <div class="portfolio-gif-details">
+                            <img src="https://placehold.co/350x200/gif/3a3a3a/eeeeee?text=Dashboard+GIF" alt="Proyecto 3 - GIF en Detalles">
+                        </div>
+                        -->
+                    </div>
+                    <button class="toggle-details-btn btn-small">Ver más</button>
+                </div>
+
+                <!-- Project 4 - -------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="portfolio-item" data-category="web">
+                    <div class="portfolio-img">
+                        <img src="https://placehold.co/400x250/2a2a2a/ffffff?text=Education+Platform" alt="Proyecto 4">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>Plataforma Educativa</h3>
+                        <p>Desarrollo full-stack</p>
+                        <div class="portfolio-links">
+                            <a href="#"><i class="fas fa-link"></i> Proyecto</a>
+                            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-details">
+                        <p>Desarrollo de una plataforma educativa online que permite a los usuarios acceder a cursos y materiales de aprendizaje. El frontend fue desarrollado con un framework moderno (ej. Vue.js) para una experiencia de usuario fluida, mientras que el backend se construyó con Python (Django/Flask) para la gestión de contenidos, perfiles de usuario y seguimiento del progreso. Se integró un sistema de comentarios y foros para fomentar la interacción entre estudiantes y profesores. El proyecto se enfocó en la escalabilidad y la facilidad de uso.</p>
+                        <!--
+                        <div class="portfolio-gif-details">
+                            <img src="https://placehold.co/350x200/gif/3a3a3a/eeeeee?text=Education+GIF" alt="Proyecto 4 - GIF en Detalles">
+                        </div>
+                        -->
+                    </div>
+                    <button class="toggle-details-btn btn-small">Ver más</button>
+                </div>
+
+                <!-- Project 5  -------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="portfolio-item" data-category="General">
+                    <div class="portfolio-img">
+                        <img src="./images/goblin3d.PNG" alt="Proyecto 5">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>Goblin 3D</h3>
+                        <p>Unity 3d platformer</p>
+                        <div class="portfolio-links">                            
+                            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-details">                        
+                        <p><strong>Project Description:</strong> Goblin3d is a 3D platformer game. The player must collect all the items around the maps before the time ends.</p>
+
+						<p><strong>My Role:</strong></p>
+							<ul>
+								<li>Implemented core gameplay mechanics such as movement, item collection, and timer countdown.</li>
+                                <li>Created the game loop, including win/lose conditions based on collected items and time limits.</li>
+                                <li>Integrated UI elements for timer</li>
+                                <li>Handled scene transitions and basic level management with Unity's SceneManager.</li>
+                                <li>Optimized performance through efficient collision handling.</li>
+							</ul>
+                        
+                        <div class="portfolio-gif-details">
+                            <img src="./gif/goblin3d.gif" alt="Proyecto 5 - GIF en Detalles">
+                        </div>
+                        
+                    </div>
+                    <button class="toggle-details-btn btn-small">Ver más</button>
+                </div>
+
+                <!-- Project 6  ArcheoRun-------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="portfolio-item" data-category="Others">
+                    <div class="portfolio-img">
+                        <img src="./images/archeorun.png" alt="Proyecto 6">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>ArcheoRun</h3>
+                        <p>Auto runner </p>
+                        <div class="portfolio-links">
+                            <a href="https://mangelhoyos.itch.io/archeorun" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> Proyecto</a>
+                            
+                        </div>
+                    </div>
+                    <div class="portfolio-details">
+                        <p><strong>Project Description:</strong> ArcheoRun is a 2D auto-runner game with an integrated minigame. The player controls an archaeologist who runs through ancient ruins, solving quick minigame rythm to progress through the level.</p>
+
+						<p><strong>My Role:</strong></p>
+							<ul>
+								<li>Lead 2D artist and animator for the entire project.</li>
+								<li>Designed all characters, environments, and visual assets from scratch.</li>
+								<li>Created frame-by-frame animations for characters, objects, and interactions.</li>
+								<li>Maintained a cohesive visual style throughout the game, including UI elements.</li>
+							</ul>
+                        
+                        <div class="portfolio-gif-details">
+                            <img src="./gif/archeorun.gif" alt="Proyecto 6 - GIF en Detalles">
+                        </div>
+                        
+                    </div>
+                    <button class="toggle-details-btn btn-small">Ver más</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact</h2>
+            </div>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <div class="contact-details-container">
+                        <!-- Element 1: Location -->
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Country</h4>
+                                <p>Colombia</p>
+                            </div>
+                        </div>
+
+                        <!-- Element 2: Email -->
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <p>vrestrepo.2357@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <!-- Element 3: Phone -->
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Tel</h4>
+                                <p>+57 300 471 5569</p>
+                            </div>
+                        </div>
+
+                        <!-- Element 4: LinkedIn -->
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>LinkedIn</h4>
+                                <p>
+                                    <a href="https://www.linkedin.com/in/victor-restrepo-287929276/" target="_blank">
+                                        Victor Restrepo
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to top button -->
+    <a href="#home" id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2025 - Todos los derechos reservados | Diseñado con <span>❤</span> por Tu negro</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>

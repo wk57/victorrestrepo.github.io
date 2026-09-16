@@ -1,26 +1,889 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Portafolio | Desarrollador Web</title>
-    <!-- Link to external CSS file -->
-    <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome for icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <title>Victor Restrepo L. | Game Developer Portfolio</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;      /* Deep Black */
+            --bg-secondary: #121215;    /* Dark Charcoal Black */
+            --bg-card: #18181c;         /* Card background */
+            --bg-card-hover: #22222a;   /* Card hover state */
+            --accent-gold: #f59e0b;     /* Vibrant Gold */
+            --accent-gold-hover: #d97706;
+            --accent-red: #dc2626;      /* Crimson Red */
+            --accent-red-hover: #b91c1c;
+            --text-primary: #f8fafc;    /* Light text */
+            --text-secondary: #a1a1aa;  /* Muted silver text */
+            --border-color: rgba(245, 158, 11, 0.15);
+            --border-color-glow: rgba(245, 158, 11, 0.4);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --transition-normal: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.9);
+            --shadow-glow: 0 0 25px rgba(245, 158, 11, 0.25);
+            --shadow-red-glow: 0 0 25px rgba(220, 38, 38, 0.35);
+        }
+
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* BACKGROUND CANVAS FOR PARTICLE ANIMATION */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* KEYFRAME ANIMATIONS */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.5); }
+        }
+
+        @keyframes goldShimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SCROLL REVEAL ANIMATION CLASSES */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.15s; }
+        .reveal-delay-2 { transition-delay: 0.3s; }
+        .reveal-delay-3 { transition-delay: 0.45s; }
+
+        /* SECTION HEADINGS */
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-red));
+            bottom: -10px;
+            left: 20%;
+            border-radius: 2px;
+            transition: var(--transition-normal);
+        }
+
+        .section-title:hover h2::after {
+            width: 100%;
+            left: 0%;
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            padding: 18px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition-normal);
+        }
+
+        header.scrolled {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            padding: 12px 0;
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            text-decoration: none;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-normal);
+        }
+
+        .logo span {
+            color: var(--accent-gold);
+            transition: var(--transition-normal);
+        }
+
+        .logo:hover {
+            transform: scale(1.03);
+        }
+
+        .logo:hover span {
+            color: var(--accent-red);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition-normal);
+            position: relative;
+            padding: 4px 0;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: var(--accent-gold);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-red));
+            transition: var(--transition-normal);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .menu-btn {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .menu-btn .bar {
+            width: 26px;
+            height: 2px;
+            background-color: var(--text-primary);
+            transition: var(--transition-normal);
+            border-radius: 2px;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
+            position: relative;
+            background: radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 80%, rgba(220, 38, 38, 0.06) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            max-width: 780px;
+        }
+
+        .hero-subtitle {
+            display: inline-block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-gold);
+            margin-bottom: 16px;
+            background: rgba(245, 158, 11, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        .hero h1 {
+            font-size: 3.6rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 22px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 50%, var(--accent-red) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: goldShimmer 4s linear infinite;
+        }
+
+        .hero p {
+            font-size: 1.18rem;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            max-width: 640px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* BUTTONS WITH SHIMMER ANIMATION */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--accent-red), #b91c1c);
+            color: #ffffff;
+            padding: 13px 30px;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.98rem;
+            transition: var(--transition-normal);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transform: rotate(30deg) translateY(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .btn:hover::after {
+            transform: rotate(30deg) translateY(100%);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-red-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fef3c7;
+            border-color: var(--accent-gold);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .social-icons {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icons a {
+            color: var(--text-secondary);
+            font-size: 1.4rem;
+            transition: var(--transition-normal);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-gold);
+            border-color: var(--accent-gold);
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* ABOUT SECTION */
+        .about {
+            padding: 100px 0;
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-img {
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .about-img::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-red));
+            z-index: -1;
+            opacity: 0.7;
+            filter: blur(10px);
+            transition: var(--transition-normal);
+        }
+
+        .about-img:hover::before {
+            opacity: 1;
+            filter: blur(15px);
+        }
+
+        .about-img img {
+            width: 100%;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            display: block;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--accent-gold);
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        /* PORTFOLIO SECTION */
+        .portfolio {
+            padding: 100px 0;
+        }
+
+        .portfolio-filter {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 45px;
+            flex-wrap: wrap;
+        }
+
+        .portfolio-filter button {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 9px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.92rem;
+            transition: var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-filter button.active,
+        .portfolio-filter button:hover {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            border-color: var(--accent-gold);
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 32px;
+        }
+
+        .portfolio-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-8px);
+            border-color: var(--border-color-glow);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.9), 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+
+        .portfolio-img {
+            height: 220px;
+            background-color: #090d16;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .portfolio-item:hover .portfolio-img img {
+            transform: scale(1.08);
+        }
+
+        .portfolio-info {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portfolio-info h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .portfolio-subtitle {
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 14px;
+        }
+
+        .portfolio-techs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: var(--transition-normal);
+        }
+
+        .portfolio-item:hover .tech-badge {
+            border-color: rgba(245, 158, 11, 0.4);
+            color: var(--text-primary);
+        }
+
+        .portfolio-links {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 12px;
+        }
+
+        .portfolio-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition-normal);
+        }
+
+        .portfolio-links a:hover {
+            color: var(--accent-gold);
+            border-color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.12);
+            transform: translateY(-2px);
+        }
+
+        /* EXPANDABLE ACCORDION ANIMATION */
+        .portfolio-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0, 1, 0, 1), padding 0.5s ease;
+            background: rgba(10, 10, 12, 0.8);
+            border-top: 1px solid transparent;
+            padding: 0 24px;
+        }
+
+        .portfolio-item.expanded .portfolio-details {
+            max-height: 1200px;
+            transition: max-height 0.8s ease-in-out, padding 0.5s ease;
+            padding: 22px 24px;
+            border-top-color: var(--border-color);
+        }
+
+        .portfolio-details p {
+            font-size: 0.93rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .portfolio-details strong {
+            color: var(--text-primary);
+        }
+
+        .portfolio-details ul {
+            margin-left: 18px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+        }
+
+        .portfolio-details ul li {
+            margin-bottom: 6px;
+        }
+
+        .portfolio-gif-details {
+            margin-top: 16px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: #000;
+            transition: var(--transition-normal);
+        }
+
+        .portfolio-gif-details img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        .toggle-details-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-secondary);
+            padding: 12px;
+            border: none;
+            border-top: 1px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .toggle-details-btn:hover {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--accent-gold);
+        }
+
+        .portfolio-item.expanded .toggle-details-btn {
+            background: rgba(220, 38, 38, 0.12);
+            color: var(--accent-red);
+        }
+
+        .toggle-details-btn i {
+            transition: transform 0.4s ease;
+        }
+
+        .portfolio-item.expanded .toggle-details-btn i {
+            transform: rotate(180deg);
+        }
+
+        /* CONTACT SECTION */
+        .contact {
+            padding: 100px 0;
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .contact-card {
+            background: var(--bg-primary);
+            padding: 30px 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: var(--transition-normal);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-gold);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            transition: var(--transition-normal);
+        }
+
+        .contact-card:hover .contact-icon {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .contact-text h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .contact-text p, .contact-text a {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            text-decoration: none;
+            transition: var(--transition-normal);
+        }
+
+        .contact-text a:hover {
+            color: var(--accent-gold);
+        }
+
+        footer {
+            background-color: #060608;
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* BACK TO TOP BUTTON WITH BOUNCE ANIMATION */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+            z-index: 999;
+            box-shadow: 0 4px 18px rgba(245, 158, 11, 0.4);
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--accent-red);
+            color: #ffffff;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: var(--shadow-red-glow);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media screen and (max-width: 868px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .about-img {
+                max-width: 260px;
+                margin: 0 auto;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            nav ul {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background-color: rgba(10, 10, 12, 0.96);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: var(--transition-normal);
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+                border-left: 1px solid var(--border-color);
+            }
+
+            nav ul.active {
+                right: 0;
+            }
+
+            .menu-btn.active .bar:nth-child(1) {
+                transform: rotate(-45deg) translate(-6px, 6px);
+            }
+
+            .menu-btn.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-btn.active .bar:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -5px);
+            }
+
+            .hero h1 {
+                font-size: 2.6rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header --->
-    <header>
+
+    <!-- Background Canvas for Animated Floating Dust/Particles -->
+    <canvas id="bg-canvas"></canvas>
+
+    <header id="header">
         <div class="container header-container">
-            <div class="logo">VM RL <span>Portfolio</span></div>
-            <div class="menu-btn">
+            <a href="#home" class="logo">
+                <i class="fas fa-gamepad" style="color: var(--accent-gold);"></i>
+                VM RL <span>Portfolio</span>
+            </a>
+            <div class="menu-btn" id="menu-btn" aria-label="Toggle menu">
                 <div class="bar"></div>
                 <div class="bar"></div>
                 <div class="bar"></div>
             </div>
             <nav>
-                <ul>
+                <ul id="nav-links">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">About me</a></li>
                     <li><a href="#portfolio">Projects</a></li>
@@ -30,383 +893,484 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Hello, I'm <span class="highlight">Victor Restrepo L.</span></h1>
-                <p>Junior game developer with a passion for creating interactive and engaging experiences through code and design.</p>
-                <a href="#portfolio" class="btn">Projects</a>
-                <a href="#contact" class="btn btn-outline">Contact</a>
-            </div>
-            <div class="social-icons">
-                <a href="https://github.com/wk57" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/victor-restrepo-287929276/" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="section-title">
-                <h2>About me</h2>
-            </div>
-            <div class="about-content">
-                <div class="about-img">
-                    <img src="./images/yo.jpg" alt="Mi foto de perfil">
-                </div>
-                <div class="about-text">
-                    <h3>Game Developer in Progress</h3>
-                    <p>I'm a recent graduate and aspiring game developer with hands-on experience in small projects and prototypes. I enjoy building digital worlds, learning new tools, and exploring how games can be both fun and meaningful.</p>
-                    <p>Currently learning more about Game Dev, React and Node.js to expand my full-stack skills, with basic knowledge of SQL. I'm focused on growing as a developer and contributing to creative, innovative teams.</p>
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="hero-subtitle reveal">Interactive & Software Developer</span>
+                    <h1 class="reveal reveal-delay-1">Hello, I'm <span class="highlight">Victor Restrepo L.</span></h1>
+                    <p class="reveal reveal-delay-2">Developer passionate about interactive solutions, software development, C#, Unity, AR Foundation, and data analysis.</p>
+                    <div class="hero-buttons reveal reveal-delay-3">
+                        <a href="#portfolio" class="btn"><i class="fas fa-gamepad"></i> Explore Projects</a>
+                        <a href="#contact" class="btn btn-outline"><i class="fas fa-envelope"></i> Contact Me</a>
+                    </div>
+                    <div class="social-icons reveal reveal-delay-3">
+                        <a href="https://github.com/wk57" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/victor-restrepo-287929276/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio">
-        <div class="container">
-            <div class="section-title">
-                <h2>My Projects</h2>
-            </div>
-            <div class="portfolio-filter">
-                <button class="active" data-filter="all">All</button>
-                <button data-filter="General">General</button>
-                <button data-filter="Prototypes">Prototypes</button>
-                <button data-filter="Others">Others</button>
-            </div>
-            <div class="portfolio-grid">
-                <!-- Project Deckfense -------------------------------------------------------------------------------------------------------------------------------------->
-                <div class="portfolio-item" data-category="General">
-                    <div class="portfolio-img">
-                        <!-- Imagen Estática Principal -->
-                        <img src="./images/deckfense.png" alt="Proyecto 1 - Imagen Estática">
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>DeckFense</h3>
-                        <p>Spells Tower Defense</p>
-                        <div class="portfolio-links">
-                            <a href="https://wk57.itch.io/deckfense?secret=8E9p93taZ5ZWJgX6jnJduPO3EI" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> Proyect</a>
-                            <a href="https://github.com/wk57/DeckFense/tree/main/DeckFense" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
-                        </div>
-                    </div>
-                    <div class="portfolio-details">
-                          <p><strong>Project Description:</strong> Deckfense is a 2.5D tower defense-style game where players use magical cards instead of placing towers. Each card casts a spell—like fireballs or slowing fields—to stop waves of enemies. 
-                            The goal is to strategically select and cast spells to prevent enemies from reaching the objective.</p>
-
-						<p><strong>My Role:</strong></p>
-							<ul>
-								<li>Developed the core gameplay system using Unity, including the card casting mechanic.</li>                                
-                                <li>Designed and integrated area-based effects like damage and slow, affecting all enemies within a radius.</li>
-                                <li>Handled animations, death transitions, and cleanup of enemies and visual effects.</li>                        
-							</ul>
-                        
-                        <div class="portfolio-gif-details">
-                            <img src="./gif/deckfense.gif" alt="Proyecto 5 - GIF en Detalles">
-                        </div>                        
-                    </div>
-                    <button class="toggle-details-btn btn-small">More</button>
+        <section id="about" class="about">
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>About Me</h2>
                 </div>
-                <!-- Project Deckfense -------------------------------------------------------------------------------------------------------------------------------------->
-
-                <!-- Project flathorizon -------------------------------------------------------------------------------------------------------------------------------------->
-                <div class="portfolio-item" data-category="General">
-                    <div class="portfolio-img">
-                        <!-- Imagen Estática Principal -->
-                        <img src="./images/flathorizon.PNG" alt="Proyecto 1 - Imagen Estática">
+                <div class="about-content">
+                    <div class="about-img reveal">
+                        <img src="./images/yo.jpg" alt="Victor Restrepo - Profile Photo" onerror="this.src='https://placehold.co/400x400/18181c/f59e0b?text=Victor+R.'">
                     </div>
-                    <div class="portfolio-info">
-                        <h3>FlatHorizon</h3>
-                        <p>Inifite Runner</p>
-                        <div class="portfolio-links">
-                            <a href="https://wk57.itch.io/flathorizon?secret=xEdFPCKdqibjMCbhY8lTTzo0vM" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> Proyect</a>
-                            <a href="https://github.com/wk57/Flat-Horizon" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
-                        </div>
+                    <div class="about-text reveal reveal-delay-1">
+                        <h3>Game & Software Developer</h3>
+                        <p>During my training, I have acquired solid knowledge in object-oriented programming (OOP), C#, databases, SQL, and software development. I am particularly interested in developing interactive solutions, working with Unity, Augmented Reality using ARFoundation, and projects that have strengthened my problem-solving skills and capacity to learn quickly.</p>
+                        <p>Additionally, I have been expanding my skills in data analysis using SQL, Excel, and Power BI, with a strong interest in areas related to software support, game development, and information technology.</p>
                     </div>
-                    <div class="portfolio-details">
-                          <p><strong>Project Description:</strong> FlatHorizon is a 2D runner game. The player must jump and dodge all the obstacles, collecting points until they fail.</p>
-
-						<p><strong>My Role:</strong></p>
-							<ul>
-								<li>Implemented core gameplay mechanics like jumping and points counter.</li>                                
-                                <li>Integrated UI elements for points</li>
-                                <li>Handled scene transitions and basic level management with Unity's SceneManager.</li>
-                                <li>Optimized performance through efficient collision handling.</li>
-							</ul>
-                        
-                        <div class="portfolio-gif-details">
-                            <img src="./gif/flathorizon.gif" alt="Proyecto 5 - GIF en Detalles">
-                        </div>                        
-                    </div>
-                    <button class="toggle-details-btn btn-small">More</button>
-                </div>
-                <!-- Project flathorizon -------------------------------------------------------------------------------------------------------------------------------------->
-
-               <!-- Project fps -------------------------------------------------------------------------------------------------------------------------------------->
-                <div class="portfolio-item" data-category="Prototypes">
-                    <div class="portfolio-img">
-                        <!-- Imagen Estática Principal -->
-                        <img src="./images/zWave.PNG" alt="Proyecto 1 - Imagen Estática">
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Z Wave</h3>
-                        <p>Survival Fps</p>
-                        <div class="portfolio-links">
-                            <a href="https://wk57.itch.io/z-wave?secret=RTFYSKQLc3lZ2ig3wyS5fu1CoKg" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> Proyect</a>
-                            <a href="https://github.com/wk57/FPS" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
-                        </div>
-                    </div>
-                    <div class="portfolio-details">
-                          <p><strong>Project Description:</strong> Z Wave is a 3D FPS survival Wave game prototype. The player must shoot and eliminate all the zombies per wave.</p>
-
-						<p><strong>My Role:</strong></p>
-                            <ul>
-                                <li>Integrated UI elements for player feedback.</li>
-                                <li>Managed scene transitions and basic level management using Unity's SceneManager.</li>
-                                <li>Optimized performance through efficient collision handling and physics interactions.</li>
-                                <li>Implemented player character control using Unity's Character Controller.</li>
-                                <li>Designed and programmed AI behaviors for enemies using NavMesh navigation.</li>
-                                <li>Integrated enemy attack animations and synchronized them with AI logic.</li>
-                                <li>Utilized ScriptableObjects for scalable and flexible weapon and enemy data management.</li>
-                                <li>Developed a state machine system for dynamic enemy animations and behaviors.</li>
-                                <li>Created a comprehensive ammunition and magazine system for weapon handling.</li>
-                                <li>Engineered a wave-based enemy spawning system for progressive gameplay challenges.</li>
-                            </ul>
-                        
-                        <div class="portfolio-gif-details">
-                            <img src="./gif/zWave.gif" alt="Proyecto 5 - GIF en Detalles">
-                        </div>                        
-                    </div>
-                    <button class="toggle-details-btn btn-small">More</button>
-                </div>
-                <!-- Project zwave -------------------------------------------------------------------------------------------------------------------------------------->
-
-                  <!-- Project netsumo -------------------------------------------------------------------------------------------------------------------------------------->
-                <div class="portfolio-item" data-category="Prototypes">
-                    <div class="portfolio-img">
-                        <!-- Imagen Estática Principal -->
-                        <img src="./images/netsumo.PNG" alt="Proyecto 1 - Imagen Estática">
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>NetSumo</h3>
-                        <p>Online Physics Brawler</p>
-                        <div class="portfolio-links">                            
-                            <a href="https://github.com/wk57/Netsumo" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
-                        </div>
-                    </div>
-                    <div class="portfolio-details">
-                          <p><strong>Project Description:</strong> NetSumo or Sumo Royale is an online "combat" game where you push to fall off the map</p>
-
-						<p><strong>My Role:</strong></p>
-                            <ul>
-                                <li>Collaborated on the implementation of multiplayer networking using Unity Netcode for GameObjects.</li>
-                                <li>Contributed to the development of the player's networked state machine, ensuring synchronized player states across clients.</li>
-                                <li>Implemented networked physics and managed Network Objects for reliable multiplayer interactions.</li>
-                                <li>Developed the Player Network Handler to manage client-side prediction and server reconciliation.</li>
-                                <li>Integrated basic animations for player interactions and actions, synchronized via Player Input and network replication.</li>
-                            </ul>
-                        
-                        <div class="portfolio-gif-details">
-                            <img src="./gif/netSumo.gif" alt="Proyecto 5 - GIF en Detalles">
-                        </div>                        
-                    </div>
-                    <button class="toggle-details-btn btn-small">More</button>
-                </div>
-                <!-- Project zwave -------------------------------------------------------------------------------------------------------------------------------------->
-
-                 <!-- Project Harvest -------------------------------------------------------------------------------------------------------------------------------------->
-                <div class="portfolio-item" data-category="General">
-                    <div class="portfolio-img">
-                        <!-- Imagen Estática Principal -->
-                        <img src="./images/harvest.PNG" alt="Proyecto 1 - Imagen Estática">
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Minigame Potion Harvest</h3>
-                        <p>Item mixing game</p>
-                        <div class="portfolio-links">                 
-                            <a href="https://wk57.itch.io/harvest-potion?secret=rKWSRH8dradsHXfUQwsMo3QjZHk" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> Proyect</a>           
-                            <a href="https://github.com/wk57/Harvest" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
-                            
-                        </div>
-                    </div>
-                    <div class="portfolio-details">
-                          <p><strong>Project Description:</strong> Harvest is a simple miniGame where you put in the cauldron the orders requested</p>
-
-						<p><strong>My Role:</strong></p>
-                            <ul>
-                                <li>Designed and implemented the Potion Crafting System, including ingredient management and recipe validation.</li>
-                                <li>Developed Drag-and-Drop UI functionality for intuitive ingredient interaction with the cauldron.</li>
-                                <li>Created a dynamic Order Generation and Display system for varied gameplay challenges.</li>
-                                <li>Managed Cauldron state (adding ingredients, resetting), and UI representation of active ingredients.</li>
-                            </ul>
-                        
-                        <div class="portfolio-gif-details">
-                            <img src="./gif/harvest.gif" alt="Proyecto 5 - GIF en Detalles">
-                        </div>                        
-                    </div>
-                    <button class="toggle-details-btn btn-small">More</button>
-                </div>
-                <!-- Project zwave -------------------------------------------------------------------------------------------------------------------------------------->
-
-                <!-- Project Goblin 3d  -------------------------------------------------------------------------------------------------------------------------------------->
-                <div class="portfolio-item" data-category="General">
-                    <div class="portfolio-img">
-                        <img src="./images/goblin3d.PNG" alt="Proyecto 5">
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Goblin 3D</h3>
-                        <p>Unity 3d platformer</p>
-                        <div class="portfolio-links">                            
-                            <a href="#"><i class="fab fa-github"></i> GitHub</a>
-                        </div>
-                    </div>
-                    <div class="portfolio-details">                        
-                        <p><strong>Project Description:</strong> Goblin3d is a 3D platformer game. The player must collect all the items around the maps before the time ends.</p>
-
-						<p><strong>My Role:</strong></p>
-							<ul>
-								<li>Implemented core gameplay mechanics such as movement, item collection, and timer countdown.</li>
-                                <li>Created the game loop, including win/lose conditions based on collected items and time limits.</li>
-                                <li>Integrated UI elements for timer</li>
-                                <li>Handled scene transitions and basic level management with Unity's SceneManager.</li>
-                                <li>Optimized performance through efficient collision handling.</li>
-							</ul>
-                        
-                        <div class="portfolio-gif-details">
-                            <img src="./gif/goblin3d.gif" alt="Proyecto 5 - GIF en Detalles">
-                        </div>
-                        
-                    </div>
-                    <button class="toggle-details-btn btn-small">More</button>
-                </div>
-
-                <!-- Project 6  ArcheoRun-------------------------------------------------------------------------------------------------------------------------------------->
-                <div class="portfolio-item" data-category="Others">
-                    <div class="portfolio-img">
-                        <img src="./images/archeorun.png" alt="Proyecto 6">
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>ArcheoRun</h3>
-                        <p>Auto runner </p>
-                        <div class="portfolio-links">
-                            <a href="https://mangelhoyos.itch.io/archeorun" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> Proyecto</a>
-                            
-                        </div>
-                    </div>
-                    <div class="portfolio-details">
-                        <p><strong>Project Description:</strong> ArcheoRun is a 2D auto-runner game with an integrated minigame. The player controls an archaeologist who runs through ancient ruins, solving quick minigame rythm to progress through the level.</p>
-
-						<p><strong>My Role:</strong></p>
-							<ul>
-								<li>Lead 2D artist and animator for the entire project.</li>
-								<li>Designed all characters, environments, and visual assets from scratch.</li>
-								<li>Created frame-by-frame animations for characters, objects, and interactions.</li>
-								<li>Maintained a cohesive visual style throughout the game, including UI elements.</li>
-							</ul>
-                        
-                        <div class="portfolio-gif-details">
-                            <img src="./gif/archeorun.gif" alt="Proyecto 6 - GIF en Detalles">
-                        </div>
-                        
-                    </div>
-                    <button class="toggle-details-btn btn-small">More</button>
-
-
-
-                    
                 </div>
             </div>
-        </div>
+        </section>
 
-        
-    </section>
+        <section id="portfolio" class="portfolio">
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>My Projects</h2>
+                </div>
+                
+                <!-- Category Filters -->
+                <div class="portfolio-filter reveal" id="portfolio-filter">
+                    <button class="active" data-filter="all">All</button>
+                    <button data-filter="General">General</button>
+                    <button data-filter="Prototypes">Prototypes</button>
+                    <button data-filter="Others">Others</button>
+                </div>
 
-    
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>Contact</h2>
+                <!-- Dynamic Projects Container -->
+                <div class="portfolio-grid" id="portfolio-grid">
+                    <!-- Projects rendered dynamically by JS -->
+                </div>
             </div>
-            <div class="contact-wrapper">
-                <div class="contact-info">
-                    <h3>Get in Touch</h3>
-                    <div class="contact-details-container">
-                        <!-- Element 1: Location -->
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Country</h4>
-                                <p>Colombia</p>
-                            </div>
-                        </div>
+        </section>
 
-                        <!-- Element 2: Email -->
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Email</h4>
-                                <p>vrestrepo.2357@gmail.com</p>
-                            </div>
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>Get in Touch</h2>
+                </div>
+                <div class="contact-grid">
+                    <div class="contact-card reveal">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
                         </div>
-
-                        <!-- Element 3: Phone -->
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Tel</h4>
-                                <p>+57 300 471 5569</p>
-                            </div>
+                        <div class="contact-text">
+                            <h4>Location</h4>
+                            <p>Colombia</p>
                         </div>
+                    </div>
 
-                        <!-- Element 4: LinkedIn -->
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-globe"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>LinkedIn</h4>
-                                <p>
-                                    <a href="https://www.linkedin.com/in/victor-restrepo-287929276/" target="_blank">
-                                        Victor Restrepo
-                                    </a>
-                                </p>
-                            </div>
+                    <div class="contact-card reveal reveal-delay-1">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Email</h4>
+                            <a href="mailto:vrestrepo.2357@gmail.com">vrestrepo.2357@gmail.com</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-card reveal reveal-delay-2">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Phone</h4>
+                            <p>+57 300 471 5569</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-card reveal reveal-delay-3">
+                        <div class="contact-icon">
+                            <i class="fab fa-linkedin-in"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>LinkedIn</h4>
+                            <a href="https://www.linkedin.com/in/victor-restrepo-287929276/" target="_blank" rel="noopener noreferrer">Victor Restrepo</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Back to top button -->
-    <a href="#home" id="back-to-top" class="back-to-top">
+    <a href="#home" id="back-to-top" class="back-to-top" aria-label="Back to Top">
         <i class="fas fa-arrow-up"></i>
     </a>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <p>© 2025 - Todos los derechos reservados</p>
-            </div>
+            <p>© 2025 Victor Restrepo L. — All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Link to external JavaScript file -->
-    <script src="script.js"></script>
+    <script>
+        /* ==========================================================================
+           BACKGROUND CANVAS ANIMATION (Interactive Particle Dust Effect)
+           ========================================================================== */
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.color = Math.random() > 0.3 ? '#f59e0b' : '#dc2626';
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        /* ==========================================================================
+           DATA ARRAY FOR PROJECTS
+           ========================================================================== */
+        const proyectos = [
+            {
+                id: "deckfense",
+                titulo: "DeckFense",
+                subtitulo: "Spells Tower Defense",
+                categoria: "General",
+                descripcion: "Deckfense is a 2.5D tower defense-style game where players use magical cards instead of placing towers. Each card casts a spell—like fireballs or slowing fields—to stop waves of enemies. The goal is to strategically select and cast spells to prevent enemies from reaching the objective.",
+                roles: [
+                    "Developed the core gameplay system using Unity, including the card casting mechanic.",
+                    "Designed and integrated area-based effects like damage and slow, affecting all enemies within a radius.",
+                    "Handled animations, death transitions, and cleanup of enemies and visual effects."
+                ],
+                imagen: "./images/deckfense.png",
+                gif: "./gif/deckfense.gif",
+                tecnologias: ["Unity 2.5D", "C#", "Card Mechanics", "Tower Defense"],
+                links: {
+                    demo: "https://wk57.itch.io/deckfense?secret=8E9p93taZ5ZWJgX6jnJduPO3EI",
+                    github: "https://github.com/wk57/DeckFense/tree/main/DeckFense"
+                }
+            },
+            {
+                id: "flathorizon",
+                titulo: "FlatHorizon",
+                subtitulo: "Infinite Runner",
+                categoria: "General",
+                descripcion: "FlatHorizon is a 2D runner game. The player must jump and dodge all the obstacles, collecting points until they fail.",
+                roles: [
+                    "Implemented core gameplay mechanics like jumping and points counter.",
+                    "Integrated UI elements for points display.",
+                    "Handled scene transitions and basic level management with Unity's SceneManager.",
+                    "Optimized performance through efficient collision handling."
+                ],
+                imagen: "./images/flathorizon.PNG",
+                gif: "./gif/flathorizon.gif",
+                tecnologias: ["Unity 2D", "C#", "Infinite Runner", "Physics"],
+                links: {
+                    demo: "https://wk57.itch.io/flathorizon?secret=xEdFPCKdqibjMCbhY8lTTzo0vM",
+                    github: "https://github.com/wk57/Flat-Horizon"
+                }
+            },
+            {
+                id: "zwave",
+                titulo: "Z Wave",
+                subtitulo: "Survival FPS",
+                categoria: "Prototypes",
+                descripcion: "Z Wave is a 3D FPS survival wave game prototype. The player must shoot and eliminate all the zombies per wave.",
+                roles: [
+                    "Integrated UI elements for player feedback and score state.",
+                    "Managed scene transitions and level management using Unity's SceneManager.",
+                    "Implemented player character control using Unity's Character Controller.",
+                    "Designed and programmed AI behaviors for enemies using NavMesh navigation.",
+                    "Utilized ScriptableObjects for scalable weapon and enemy data management.",
+                    "Engineered a wave-based enemy spawning system and magazine system."
+                ],
+                imagen: "./images/zWave.PNG",
+                gif: "./gif/zWave.gif",
+                tecnologias: ["Unity 3D", "C#", "NavMesh AI", "ScriptableObjects", "State Machine"],
+                links: {
+                    demo: "https://wk57.itch.io/z-wave?secret=RTFYSKQLc3lZ2ig3wyS5fu1CoKg",
+                    github: "https://github.com/wk57/FPS"
+                }
+            },
+            {
+                id: "netsumo",
+                titulo: "NetSumo",
+                subtitulo: "Online Physics Brawler",
+                categoria: "Prototypes",
+                descripcion: "NetSumo (Sumo Royale) is an online multiplayer combat game where players push opponents to knock them off the map platform.",
+                roles: [
+                    "Collaborated on multiplayer networking using Unity Netcode for GameObjects.",
+                    "Contributed to the development of the player's networked state machine.",
+                    "Implemented networked physics and managed Network Objects for multiplayer interactions.",
+                    "Developed the Player Network Handler to manage client-side prediction and server reconciliation."
+                ],
+                imagen: "./images/netsumo.PNG",
+                gif: "./gif/netSumo.gif",
+                tecnologias: ["Unity", "C#", "Netcode for GameObjects", "Physics Multiplayer"],
+                links: {
+                    demo: null,
+                    github: "https://github.com/wk57/Netsumo"
+                }
+            },
+            {
+                id: "harvest",
+                titulo: "Minigame Potion Harvest",
+                subtitulo: "Item Mixing Game",
+                categoria: "General",
+                descripcion: "Harvest is a simple mini-game where you place ingredients into the cauldron to match the dynamic potion orders requested.",
+                roles: [
+                    "Designed and implemented the Potion Crafting System, including ingredient management and recipe validation.",
+                    "Developed Drag-and-Drop UI functionality for intuitive ingredient interaction.",
+                    "Created a dynamic Order Generation and Display system for gameplay challenges.",
+                    "Managed cauldron state and UI representation of active ingredients."
+                ],
+                imagen: "./images/harvest.PNG",
+                gif: "./gif/harvest.gif",
+                tecnologias: ["Unity", "C#", "Drag & Drop UI", "Crafting Mechanics"],
+                links: {
+                    demo: "https://wk57.itch.io/harvest-potion?secret=rKWSRH8dradsHXfUQwsMo3QjZHk",
+                    github: "https://github.com/wk57/Harvest"
+                }
+            },
+            {
+                id: "goblin3d",
+                titulo: "Goblin 3D",
+                subtitulo: "Unity 3D Platformer",
+                categoria: "General",
+                descripcion: "Goblin 3D is a 3D platformer game where the player must collect all items scattered across the maps before the timer expires.",
+                roles: [
+                    "Implemented core gameplay mechanics such as movement, item collection, and timer countdown.",
+                    "Created the game loop, including win/lose conditions based on collected items and time limits.",
+                    "Handled scene transitions and level management with Unity's SceneManager."
+                ],
+                imagen: "./images/goblin3d.PNG",
+                gif: "./gif/goblin3d.gif",
+                tecnologias: ["Unity 3D", "C#", "3D Platformer", "Game Loop"],
+                links: {
+                    demo: null,
+                    github: null
+                }
+            },
+            {
+                id: "archeorun",
+                titulo: "ArcheoRun",
+                subtitulo: "Auto Runner",
+                categoria: "Others",
+                descripcion: "ArcheoRun is a 2D auto-runner game with an integrated rhythm minigame. The player controls an archaeologist running through ancient ruins.",
+                roles: [
+                    "Lead 2D artist and animator for the entire project.",
+                    "Designed all characters, environments, and visual assets from scratch.",
+                    "Created frame-by-frame animations for characters, objects, and interactions.",
+                    "Maintained a cohesive visual style throughout the game UI and backgrounds."
+                ],
+                imagen: "./images/archeorun.png",
+                gif: "./gif/archeorun.gif",
+                tecnologias: ["2D Animation", "Character Design", "Concept Art", "Game UI"],
+                links: {
+                    demo: "https://mangelhoyos.itch.io/archeorun",
+                    github: null
+                }
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridContainer = document.getElementById('portfolio-grid');
+            const filterButtons = document.querySelectorAll('#portfolio-filter button');
+
+            // Function to render project items dynamically
+            function renderizarProyectos(listaProyectos) {
+                if (!gridContainer) return;
+                gridContainer.innerHTML = '';
+
+                listaProyectos.forEach((proyecto, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'portfolio-item reveal';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.setAttribute('data-category', proyecto.categoria);
+
+                    const techBadgesHTML = proyecto.tecnologias.map(tech => 
+                        `<span class="tech-badge">${tech}</span>`
+                    ).join('');
+
+                    let linksHTML = '';
+                    if (proyecto.links.demo) {
+                        linksHTML += `<a href="${proyecto.links.demo}" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i> Project</a>`;
+                    }
+                    if (proyecto.links.github) {
+                        linksHTML += `<a href="${proyecto.links.github}" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>`;
+                    }
+
+                    const rolesHTML = proyecto.roles.map(role => `<li>${role}</li>`).join('');
+
+                    card.innerHTML = `
+                        <div class="portfolio-img">
+                            <img src="${proyecto.imagen}" alt="${proyecto.titulo}" onerror="this.src='https://placehold.co/600x400/18181c/f59e0b?text=${encodeURIComponent(proyecto.titulo)}'">
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>${proyecto.titulo}</h3>
+                            <div class="portfolio-subtitle">${proyecto.subtitulo}</div>
+                            <div class="portfolio-techs">${techBadgesHTML}</div>
+                            ${linksHTML ? `<div class="portfolio-links">${linksHTML}</div>` : ''}
+                        </div>
+                        <div class="portfolio-details">
+                            <p><strong>Project Description:</strong> ${proyecto.descripcion}</p>
+                            <p><strong>My Role:</strong></p>
+                            <ul>${rolesHTML}</ul>
+                            ${proyecto.gif ? `
+                                <div class="portfolio-gif-details">
+                                    <img src="${proyecto.gif}" alt="${proyecto.titulo} Gameplay GIF" onerror="this.style.display='none'">
+                                </div>
+                            ` : ''}
+                        </div>
+                        <button class="toggle-details-btn" aria-expanded="false">
+                            <span>More Details</span> <i class="fas fa-chevron-down"></i>
+                        </button>
+                    `;
+
+                    // Accordion expand logic
+                    const toggleBtn = card.querySelector('.toggle-details-btn');
+                    toggleBtn.addEventListener('click', () => {
+                        const isExpanded = card.classList.toggle('expanded');
+                        toggleBtn.setAttribute('aria-expanded', isExpanded);
+                        toggleBtn.querySelector('span').textContent = isExpanded ? 'Show Less' : 'More Details';
+                    });
+
+                    gridContainer.appendChild(card);
+                });
+
+                // Re-trigger reveal animation check for newly added cards
+                observeReveals();
+            }
+
+            renderizarProyectos(proyectos);
+
+            // Filtering logic
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const category = btn.getAttribute('data-filter');
+                    if (category === 'all') {
+                        renderizarProyectos(proyectos);
+                    } else {
+                        const filtrados = proyectos.filter(p => p.categoria === category);
+                        renderizarProyectos(filtrados);
+                    }
+                });
+            });
+
+            /* ==========================================================================
+               SCROLL REVEAL ANIMATIONS (INTERSECTION OBSERVER)
+               ========================================================================== */
+            function observeReveals() {
+                const revealElements = document.querySelectorAll('.reveal');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        }
+                    });
+                }, {
+                    threshold: 0.12,
+                    rootMargin: "0px 0px -40px 0px"
+                });
+
+                revealElements.forEach(el => observer.observe(el));
+            }
+
+            observeReveals();
+
+            // Mobile Navigation Toggle
+            const menuBtn = document.getElementById('menu-btn');
+            const navLinks = document.getElementById('nav-links');
+
+            if (menuBtn && navLinks) {
+                menuBtn.addEventListener('click', () => {
+                    menuBtn.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+
+                document.querySelectorAll('#nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menuBtn.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    });
+                });
+            }
+
+            // Header Shadow & Back-To-Top Button Logic
+            const header = document.getElementById('header');
+            const backToTopBtn = document.getElementById('back-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('active');
+                } else {
+                    backToTopBtn.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
